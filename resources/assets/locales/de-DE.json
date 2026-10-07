@@ -1,0 +1,208 @@
+{
+  "pages": {
+    "main": {
+      "hints": {
+        "redrawing": "Wird neu gezeichnet...",
+        "switching": "Wird gewechselt..."
+      }
+    },
+    "preference": {
+      "title": "Einstellungen",
+      "cat": {
+        "title": "Anzeige",
+        "labels": {
+          "modelSettings": "Modelleinstellungen",
+          "mirrorMode": "Spiegelmodus",
+          "mouseMirror": "Maus spiegeln",
+          "mouseCentered": "Maus auf Desktop-Begleiter zentriert",
+          "ignoreMouse": "Mausereignisse ignorieren",
+          "windowSettings": "Fenstereinstellungen",
+          "passThrough": "Klicks durchlassen",
+          "alwaysOnTop": "Immer im Vordergrund",
+          "keepInScreen": "Auf dem Bildschirm halten",
+          "windowSize": "Fenstergröße",
+          "opacity": "Deckkraft",
+          "autoReleaseDelay": "Verzögerung der automatischen Freigabe",
+          "hideOnHover": "Beim Darüberfahren ausblenden",
+          "maxFPS": "Maximale Bildrate"
+        },
+        "hints": {
+          "passThrough": "Wenn aktiviert, gehen Klicks durch das Fenster hindurch, ohne es zu beeinflussen.",
+          "alwaysOnTop": "Wenn aktiviert, bleibt das Fenster über allen anderen Fenstern.",
+          "keepInScreen": "Wenn aktiviert, bleibt das Fenster automatisch innerhalb der Bildschirmgrenzen.",
+          "windowSize": "Bewegen Sie die Maus an den Fensterrand oder halten Sie Umschalt gedrückt und ziehen Sie mit der rechten Maustaste.",
+          "hideOnHover": "Wenn aktiviert, wird das Fenster beim Darüberfahren mit der Maus automatisch ausgeblendet. Die Verzögerung 0 blendet es sofort aus."
+        }
+      },
+      "general": {
+        "title": "Allgemein",
+        "labels": {
+          "appSettings": "Anwendungseinstellungen",
+          "launchOnStartup": "Beim Systemstart ausführen",
+          "showTrayIcon": "Infobereichssymbol anzeigen",
+          "appearanceSettings": "Darstellung",
+          "themeMode": "Design",
+          "language": "Sprache",
+          "permissionsSettings": "Berechtigungen",
+          "inputMonitoringPermission": "Berechtigung zur Eingabeüberwachung",
+          "administratorPermission": "Administrator"
+        },
+        "options": {
+          "auto": "System",
+          "lightMode": "Hell",
+          "darkMode": "Dunkel"
+        },
+        "hints": {
+          "showTrayIcon": "Wenn aktiviert, wird das Anwendungssymbol im Infobereich angezeigt.",
+          "inputMonitoringPermission": "Aktivieren Sie die Eingabeüberwachung, um Tastatur- und Mausereignisse vom System zu empfangen.",
+          "inputMonitoringPermissionGuide": "Die Berechtigung zur Eingabeüberwachung ist erforderlich, damit die Anwendung Tastatur- und Mausereignisse vom System empfangen kann.\n\nSchritte:\n1. Öffnen Sie Systemeinstellungen > Datenschutz & Sicherheit > Eingabeüberwachung.\n2. Falls BongoCat bereits aufgeführt ist, wählen Sie es aus und entfernen Sie es mit der Schaltfläche \"-\".\n3. Klicken Sie auf \"+\", um BongoCat zu suchen und hinzuzufügen.\n4. Starten Sie die Anwendung neu, damit die Berechtigung wirksam wird.",
+          "administratorPermission": "Als Administrator kann die Anwendung bestimmte Systemtasten und Eingabeereignisse zuverlässiger erfassen.",
+          "administratorPermissionGuide": "Für eine zuverlässigere Erfassung bestimmter Systemtasten und Eingabeereignisse wird empfohlen, die Anwendung als Administrator auszuführen.\n\nVorgehen:\n1. Beenden Sie zuerst die Anwendung.\n2. Suchen Sie die exe-Datei oder ihre Verknüpfung im Datei-Explorer.\n3. Wählen Sie die Startart:\n   - Einmalig: Rechtsklick und \"Als Administrator ausführen\" wählen.\n   - Immer: Rechtsklick > Eigenschaften > Kompatibilität > \"Programm als Administrator ausführen\" aktivieren > OK."
+        },
+        "status": {
+          "authorized": "Autorisiert",
+          "adminEnabled": "Aktiviert",
+          "authorize": "Aktivieren",
+          "viewGuide": "Anleitung anzeigen"
+        },
+        "buttons": {
+          "openNow": "Jetzt öffnen",
+          "openLater": "Später öffnen",
+          "setLater": "Später einrichten",
+          "exitApp": "Anwendung beenden"
+        }
+      },
+      "model": {
+        "title": "Modell",
+        "labels": {
+          "deleteModel": "Modell löschen",
+          "nearbyModels": "Benachbarte Ordner"
+        },
+        "hints": {
+          "deleteSuccess": "Erfolgreich gelöscht",
+          "deleteModel": "Möchten Sie dieses Modell wirklich löschen?",
+          "importSuccess": "Erfolgreich importiert",
+          "clickOrDragToImport": "Zum Importieren klicken oder hierher ziehen",
+          "openDirectoryFailed": "Modellordner konnte nicht geöffnet werden"
+        },
+        "tooltips": {
+          "createModel": "Modell erstellen",
+          "convertModel": "Modell konvertieren",
+          "moreModels": "Weitere Modelle"
+        },
+        "behaviorModal": {
+          "title": "Bewegungen und Ausdrücke",
+          "labels": {
+            "motion": "Bewegung",
+            "expression": "Ausdruck",
+            "motionIndex": "Bewegung {index}",
+            "motionGroupIndex": "Bewegungsgruppe {index}",
+            "expressionIndex": "Ausdruck {index}"
+          }
+        }
+      },
+      "shortcut": {
+        "title": "Tastenkürzel",
+        "labels": {
+          "toggleCat": "Begleiter ein-/ausblenden",
+          "togglePreferences": "Einstellungen ein-/ausblenden",
+          "mirrorMode": "Spiegelmodus",
+          "passThrough": "Klicks durchlassen",
+          "alwaysOnTop": "Immer im Vordergrund"
+        },
+        "hints": {
+          "toggleCat": "Blendet das Begleiterfenster ein oder aus.",
+          "togglePreferences": "Blendet das Einstellungsfenster ein oder aus.",
+          "mirrorMode": "Schaltet den Spiegelmodus des Begleiters um.",
+          "passThrough": "Schaltet um, ob Klicks durch das Begleiterfenster gehen.",
+          "alwaysOnTop": "Schaltet um, ob das Begleiterfenster im Vordergrund bleibt."
+        }
+      },
+      "about": {
+        "title": "Info",
+        "labels": {
+          "aboutApp": "Über die Anwendung",
+          "appLog": "Anwendungsprotokolle"
+        },
+        "hints": {
+          "copySuccess": "Erfolgreich kopiert"
+        },
+        "buttons": {
+          "copy": "Kopieren",
+          "viewLog": "Protokolle anzeigen"
+        }
+      }
+    }
+  },
+  "components": {
+    "shortcut": {
+      "hints": {
+        "pressRecordShortcut": "Drücken, um das Tastenkürzel aufzuzeichnen",
+        "clickRecordShortcut": "Klicken, um das Tastenkürzel aufzuzeichnen",
+        "alreadyUsed": "Dieses Tastenkürzel wird bereits verwendet. Wählen Sie ein anderes."
+      }
+    }
+  },
+  "composables": {
+    "useAppMenu": {
+      "labels": {
+        "preference": "Einstellungen...",
+        "hideCat": "Begleiter ausblenden",
+        "showCat": "Begleiter anzeigen",
+        "passThrough": "Klicks durchlassen",
+        "alwaysOnTop": "Immer im Vordergrund",
+        "windowSize": "Fenstergröße",
+        "opacity": "Deckkraft",
+        "motion": "Bewegungen",
+        "expression": "Ausdrücke",
+        "wheelSizeHint": "Mausrad: Größe ändern",
+        "wheelOpacityHint": "Strg+Mausrad: Deckkraft",
+        "quitApp": "Anwendung beenden",
+        "model": "Modell",
+        "addModel": "Modell hinzufügen"
+      }
+    }
+  },
+  "utils": {
+    "live2d": {
+      "hints": {
+        "notFound": "Die Hauptkonfigurationsdatei des Modells wurde nicht gefunden. Stellen Sie sicher, dass die Modelldateien vollständig sind."
+      }
+    }
+  },
+  "native": {
+    "modelLoadFailed": "Dieses Modell kann nicht angezeigt werden",
+    "noBehaviors": "Keine Einträge",
+    "support": {
+      "title": "Entwicklungsteam unterstützen",
+      "heroText": "Vielen Dank für Ihre Unterstützung. Jede Nutzung und Weitergabe hilft BongoCat, weiter zu wachsen.",
+      "version": "Anwendungsversion",
+      "checkUpdate": "Nach Updates suchen",
+      "feedback": "Feedback",
+      "latest": "Bereits aktuell",
+      "works": "Weitere Anwendungen",
+      "worksText": "Weitere Software von vladelaina",
+      "refactorDeveloper": "(Entwickler, der BongoCat in C neu aufgebaut hat)",
+      "community": "Community",
+      "qqGroup": "QQ-Gruppe",
+      "coffee": "Dem Entwicklungsteam einen Kaffee spendieren?"
+    },
+    "shortcut": {
+      "toggleCat": "Ein-/ausblenden",
+      "preferences": "Einstellungen",
+      "mirror": "Spiegeln",
+      "passThrough": "Klicks durchlassen",
+      "alwaysOnTop": "Immer im Vordergrund"
+    },
+    "hoverDelay": "Verzögerung beim Darüberfahren (Sekunden)",
+    "modeStandard": "Standard",
+    "modeKeyboard": "Tastatur",
+    "modeGamepad": "Gamepad",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "select": "Auswählen",
+    "selected": "Ausgewählt",
+    "import": "Importieren",
+    "builtIn": "integriert"
+  }
+}

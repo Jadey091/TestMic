@@ -1,0 +1,208 @@
+{
+  "pages": {
+    "main": {
+      "hints": {
+        "redrawing": "再描画中...",
+        "switching": "切り替え中..."
+      }
+    },
+    "preference": {
+      "title": "設定",
+      "cat": {
+        "title": "表示",
+        "labels": {
+          "modelSettings": "モデル設定",
+          "mirrorMode": "ミラーモード",
+          "mouseMirror": "マウスを反転",
+          "mouseCentered": "マウスをデスクトップペット中心にする",
+          "ignoreMouse": "マウスイベントを無視",
+          "windowSettings": "ウィンドウ設定",
+          "passThrough": "クリックを透過",
+          "alwaysOnTop": "常に手前に表示",
+          "keepInScreen": "画面内に保持",
+          "windowSize": "ウィンドウサイズ",
+          "opacity": "不透明度",
+          "autoReleaseDelay": "自動リリースまでの時間",
+          "hideOnHover": "ホバー時に非表示",
+          "maxFPS": "最大フレームレート"
+        },
+        "hints": {
+          "passThrough": "有効にすると、クリックはウィンドウに影響せず背後へ通過します。",
+          "alwaysOnTop": "有効にすると、ウィンドウがほかのすべてのウィンドウより手前に表示されます。",
+          "keepInScreen": "有効にすると、ウィンドウが自動的に画面の範囲内に収まります。",
+          "windowSize": "マウスをウィンドウ端へ移動するか、Shiftキーを押しながら右ドラッグしてサイズを変更します。",
+          "hideOnHover": "有効にすると、マウスを重ねたときにウィンドウが自動的に隠れます。遅延を設定でき、0ではすぐに隠れます。"
+        }
+      },
+      "general": {
+        "title": "一般",
+        "labels": {
+          "appSettings": "アプリ設定",
+          "launchOnStartup": "起動時に実行",
+          "showTrayIcon": "トレイアイコンを表示",
+          "appearanceSettings": "外観設定",
+          "themeMode": "テーマ",
+          "language": "言語",
+          "permissionsSettings": "権限設定",
+          "inputMonitoringPermission": "入力監視の権限",
+          "administratorPermission": "管理者"
+        },
+        "options": {
+          "auto": "システム",
+          "lightMode": "ライト",
+          "darkMode": "ダーク"
+        },
+        "hints": {
+          "showTrayIcon": "有効にすると、システムトレイにアプリアイコンを表示します。",
+          "inputMonitoringPermission": "システムからキーボードとマウスのイベントを受け取るには、入力監視を有効にしてください。",
+          "inputMonitoringPermissionGuide": "システムからキーボードとマウスのイベントを受け取るには、入力監視の権限が必要です。\n\n手順：\n1. システム設定 > プライバシーとセキュリティ > 入力監視を開きます。\n2. BongoCatがすでに一覧にある場合は選択し、\"-\"ボタンで削除します。\n3. \"+\"ボタンをクリックしてBongoCatを探し、追加します。\n4. 権限を反映するため、アプリを再起動します。",
+          "administratorPermission": "管理者として実行すると、一部のシステムキーや入力イベントをより確実に取得できます。",
+          "administratorPermissionGuide": "一部のシステムキーや入力イベントをより確実に取得するため、アプリを管理者として実行することを推奨します。\n\n手順：\n1. まずアプリを終了します。\n2. エクスプローラーでアプリのexeファイルまたはショートカットを探します。\n3. 起動方法を選びます：\n   - 今回のみ：右クリックして\"管理者として実行\"を選びます。\n   - 常に：右クリック > プロパティ > 互換性 > \"管理者としてこのプログラムを実行する\"にチェック > OK。"
+        },
+        "status": {
+          "authorized": "許可済み",
+          "adminEnabled": "有効",
+          "authorize": "有効にする",
+          "viewGuide": "手順を表示"
+        },
+        "buttons": {
+          "openNow": "今すぐ開く",
+          "openLater": "後で開く",
+          "setLater": "後で設定",
+          "exitApp": "アプリを終了"
+        }
+      },
+      "model": {
+        "title": "モデル",
+        "labels": {
+          "deleteModel": "モデルを削除",
+          "nearbyModels": "近くのフォルダー"
+        },
+        "hints": {
+          "deleteSuccess": "削除しました",
+          "deleteModel": "このモデルを削除しますか？",
+          "importSuccess": "インポートしました",
+          "clickOrDragToImport": "クリックまたはここへドラッグしてインポート",
+          "openDirectoryFailed": "モデルフォルダーを開けません"
+        },
+        "tooltips": {
+          "createModel": "モデルを作成",
+          "convertModel": "モデルを変換",
+          "moreModels": "その他のモデル"
+        },
+        "behaviorModal": {
+          "title": "モーションと表情",
+          "labels": {
+            "motion": "モーション",
+            "expression": "表情",
+            "motionIndex": "モーション {index}",
+            "motionGroupIndex": "モーショングループ {index}",
+            "expressionIndex": "表情 {index}"
+          }
+        }
+      },
+      "shortcut": {
+        "title": "ショートカット",
+        "labels": {
+          "toggleCat": "ペットの表示を切り替え",
+          "togglePreferences": "設定の表示を切り替え",
+          "mirrorMode": "ミラーモード",
+          "passThrough": "クリックを透過",
+          "alwaysOnTop": "常に手前に表示"
+        },
+        "hints": {
+          "toggleCat": "ペットウィンドウの表示と非表示を切り替えます。",
+          "togglePreferences": "設定ウィンドウの表示と非表示を切り替えます。",
+          "mirrorMode": "ペットのミラーモードを切り替えます。",
+          "passThrough": "ペットウィンドウのクリック透過を切り替えます。",
+          "alwaysOnTop": "ペットウィンドウを常に手前に表示するか切り替えます。"
+        }
+      },
+      "about": {
+        "title": "このアプリについて",
+        "labels": {
+          "aboutApp": "アプリ情報",
+          "appLog": "アプリログ"
+        },
+        "hints": {
+          "copySuccess": "コピーしました"
+        },
+        "buttons": {
+          "copy": "コピー",
+          "viewLog": "ログを表示"
+        }
+      }
+    }
+  },
+  "components": {
+    "shortcut": {
+      "hints": {
+        "pressRecordShortcut": "キーを押してショートカットを記録",
+        "clickRecordShortcut": "クリックしてショートカットを記録",
+        "alreadyUsed": "このショートカットはすでに使用されています。別のものを選んでください。"
+      }
+    }
+  },
+  "composables": {
+    "useAppMenu": {
+      "labels": {
+        "preference": "設定...",
+        "hideCat": "ペットを隠す",
+        "showCat": "ペットを表示",
+        "passThrough": "クリックを透過",
+        "alwaysOnTop": "常に手前に表示",
+        "windowSize": "ウィンドウサイズ",
+        "opacity": "不透明度",
+        "motion": "モーション",
+        "expression": "表情",
+        "wheelSizeHint": "ホイール：サイズ変更",
+        "wheelOpacityHint": "Ctrl+ホイール：不透明度",
+        "quitApp": "アプリを終了",
+        "model": "モデル",
+        "addModel": "モデルを追加"
+      }
+    }
+  },
+  "utils": {
+    "live2d": {
+      "hints": {
+        "notFound": "モデルのメイン設定ファイルが見つかりません。モデルファイルが完全か確認してください。"
+      }
+    }
+  },
+  "native": {
+    "modelLoadFailed": "このモデルを表示できません",
+    "noBehaviors": "項目がありません",
+    "support": {
+      "title": "開発チームを支援",
+      "heroText": "ご支援ありがとうございます。利用や共有の一つひとつがBongoCatの成長につながります。",
+      "version": "アプリのバージョン",
+      "checkUpdate": "更新を確認",
+      "feedback": "フィードバック",
+      "latest": "最新バージョンです",
+      "works": "その他のアプリ",
+      "worksText": "vladelainaのその他のソフトウェア",
+      "refactorDeveloper": "（BongoCatをCで再構築した開発者）",
+      "community": "コミュニティ",
+      "qqGroup": "QQグループ",
+      "coffee": "開発チームにコーヒーを贈りますか？"
+    },
+    "shortcut": {
+      "toggleCat": "表示/非表示",
+      "preferences": "設定",
+      "mirror": "ミラー",
+      "passThrough": "クリックを透過",
+      "alwaysOnTop": "常に手前に表示"
+    },
+    "hoverDelay": "ホバー遅延（秒）",
+    "modeStandard": "標準",
+    "modeKeyboard": "キーボード",
+    "modeGamepad": "ゲームパッド",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "select": "選択",
+    "selected": "選択済み",
+    "import": "インポート",
+    "builtIn": "内蔵"
+  }
+}

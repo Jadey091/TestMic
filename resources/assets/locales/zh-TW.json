@@ -1,0 +1,208 @@
+{
+  "pages": {
+    "main": {
+      "hints": {
+        "redrawing": "重繪中…",
+        "switching": "切換中…"
+      }
+    },
+    "preference": {
+      "title": "偏好設定",
+      "cat": {
+        "title": "顯示設定",
+        "labels": {
+          "modelSettings": "模型設定",
+          "mirrorMode": "鏡像模式",
+          "mouseMirror": "滑鼠游標鏡像",
+          "mouseCentered": "滑鼠以桌寵為中心",
+          "ignoreMouse": "忽略滑鼠事件",
+          "windowSettings": "視窗設定",
+          "passThrough": "視窗穿透",
+          "alwaysOnTop": "視窗置頂",
+          "keepInScreen": "保持在螢幕內",
+          "windowSize": "視窗尺寸",
+          "opacity": "不透明度",
+          "autoReleaseDelay": "按鍵自動釋放延遲",
+          "hideOnHover": "滑鼠游標移入隱藏",
+          "maxFPS": "最大幀率"
+        },
+        "hints": {
+          "passThrough": "啟用後，視窗不影響對其他應用程式的操作。",
+          "alwaysOnTop": "啟用後，視窗始終顯示在其他應用程式上方。",
+          "keepInScreen": "啟用後，視窗會自動調整位置，防止超出螢幕邊界。",
+          "windowSize": "將滑鼠游標移至視窗邊緣，或按住 Shift 並右鍵拖曳，也可以調整視窗大小。",
+          "hideOnHover": "啟用後，滑鼠游標懸停視窗時自動隱藏。可設定延遲時間，0 表示立即隱藏。"
+        }
+      },
+      "general": {
+        "title": "一般設定",
+        "labels": {
+          "appSettings": "應用程式設定",
+          "launchOnStartup": "開機自動啟動",
+          "showTrayIcon": "顯示托盤圖示",
+          "appearanceSettings": "外觀設定",
+          "themeMode": "主題",
+          "language": "語言",
+          "permissionsSettings": "權限設定",
+          "inputMonitoringPermission": "輸入監控權限",
+          "administratorPermission": "系統管理員身分"
+        },
+        "options": {
+          "auto": "跟隨系統",
+          "lightMode": "淺色模式",
+          "darkMode": "深色模式"
+        },
+        "hints": {
+          "showTrayIcon": "啟用後，在系統托盤中顯示應用程式圖示。",
+          "inputMonitoringPermission": "開啟輸入監控權限，以便接收系統的鍵盤和滑鼠游標事件來回應您的操作。",
+          "inputMonitoringPermissionGuide": "開啟輸入監控權限後，應用程式才能接收系統的鍵盤和滑鼠事件，進而回應你的操作。\n\n操作方式：\n1. 開啟「系統設定」→「隱私權與安全性」→「輸入監控」。\n2. 若清單中已存在 BongoCat，請先選取它，點擊「-」按鈕將其刪除。\n3. 點擊「+」按鈕，找到並新增 BongoCat 應用程式。\n4. 重新啟動應用程式，以確保權限正式生效。",
+          "administratorPermission": "以系統管理員身分執行應用程式，可以更穩定地擷取部分系統層級按鍵與輸入事件。",
+          "administratorPermissionGuide": "為了能更穩定地擷取部分系統層級按鍵與輸入事件，建議以系統管理員身分執行應用程式。\n\n操作方式：\n1. 先退出應用程式。\n2. 在檔案總管中找到應用程式的 exe 或捷徑。\n3. 根據需求選擇啟動方式：\n   • 僅本次：右鍵並選擇「以系統管理員身分執行」。\n   • 永久預設：右鍵 → 內容 → 相容性索引標籤 → 勾選「以系統管理員身分執行此程式」→ 確定。"
+        },
+        "status": {
+          "authorized": "已授權",
+          "adminEnabled": "已啟用",
+          "authorize": "去授權",
+          "viewGuide": "查看操作說明"
+        },
+        "buttons": {
+          "openNow": "前往開啟",
+          "openLater": "稍後開啟",
+          "setLater": "稍後設置",
+          "exitApp": "退出應用"
+        }
+      },
+      "model": {
+        "title": "模型管理",
+        "labels": {
+          "deleteModel": "刪除模型",
+          "nearbyModels": "附近資料夾"
+        },
+        "hints": {
+          "deleteSuccess": "刪除成功",
+          "deleteModel": "您確定要刪除此模型嗎？",
+          "importSuccess": "匯入成功",
+          "clickOrDragToImport": "點擊或拖曳至此區域匯入",
+          "openDirectoryFailed": "無法開啟模型目錄"
+        },
+        "tooltips": {
+          "createModel": "製作模型",
+          "convertModel": "轉換模型",
+          "moreModels": "更多模型"
+        },
+        "behaviorModal": {
+          "title": "動作與表情",
+          "labels": {
+            "motion": "動作",
+            "expression": "表情",
+            "motionIndex": "動作{index}",
+            "motionGroupIndex": "動作組{index}",
+            "expressionIndex": "表情{index}"
+          }
+        }
+      },
+      "shortcut": {
+        "title": "快速鍵",
+        "labels": {
+          "toggleCat": "開啟貓咪",
+          "togglePreferences": "開啟偏好設定",
+          "mirrorMode": "鏡像模式",
+          "passThrough": "視窗穿透",
+          "alwaysOnTop": "視窗置頂"
+        },
+        "hints": {
+          "toggleCat": "切換貓咪視窗的顯示與隱藏。",
+          "togglePreferences": "切換偏好設定視窗的顯示與隱藏。",
+          "mirrorMode": "切換貓咪的鏡像模式。",
+          "passThrough": "切換貓咪視窗是否可穿透。",
+          "alwaysOnTop": "切換貓咪視窗是否置頂。"
+        }
+      },
+      "about": {
+        "title": "關於",
+        "labels": {
+          "aboutApp": "關於軟體",
+          "appLog": "軟體日誌"
+        },
+        "hints": {
+          "copySuccess": "複製成功"
+        },
+        "buttons": {
+          "copy": "複製",
+          "viewLog": "查看日誌"
+        }
+      }
+    }
+  },
+  "components": {
+    "shortcut": {
+      "hints": {
+        "pressRecordShortcut": "按下錄製快速鍵",
+        "clickRecordShortcut": "點擊錄製快速鍵",
+        "alreadyUsed": "此快速鍵已被使用，請選擇其他組合。"
+      }
+    }
+  },
+  "composables": {
+    "useAppMenu": {
+      "labels": {
+        "preference": "偏好設定…",
+        "hideCat": "隱藏貓咪",
+        "showCat": "顯示貓咪",
+        "passThrough": "視窗穿透",
+        "alwaysOnTop": "置頂",
+        "windowSize": "視窗尺寸",
+        "opacity": "不透明度",
+        "motion": "動作",
+        "expression": "表情",
+        "wheelSizeHint": "滾輪調整大小",
+        "wheelOpacityHint": "Ctrl+滾輪調整透明度",
+        "quitApp": "退出應用程式",
+        "model": "模型",
+        "addModel": "新增模型"
+      }
+    }
+  },
+  "utils": {
+    "live2d": {
+      "hints": {
+        "notFound": "未找到模型主設定檔，請確認模型文件是否完整。"
+      }
+    }
+  },
+  "native": {
+    "modelLoadFailed": "\u6a21\u578b\u7121\u6cd5\u986f\u793a",
+    "noBehaviors": "暫無可用項目",
+    "support": {
+      "title": "支援開發團隊",
+      "heroText": "感謝你的支持。每一次使用與分享，都讓 BongoCat 持續成長。",
+      "version": "應用程式版本",
+      "checkUpdate": "檢查更新",
+      "feedback": "意見回饋",
+      "latest": "已是最新版本",
+      "works": "更多作品",
+      "worksText": "來自 vladelaina 的其他軟體",
+      "refactorDeveloper": "（使用C語言重構BongoCat的開發者）",
+      "community": "社群",
+      "qqGroup": "QQ 群",
+      "coffee": "請開發團隊喝杯咖啡？"
+    },
+    "shortcut": {
+      "toggleCat": "顯示/隱藏",
+      "preferences": "設定",
+      "mirror": "鏡像",
+      "passThrough": "滑鼠穿透",
+      "alwaysOnTop": "置頂"
+    },
+    "hoverDelay": "懸停隱藏延遲（秒）",
+    "modeStandard": "標準模式",
+    "modeKeyboard": "鍵盤模式",
+    "modeGamepad": "遊戲手把模式",
+    "cancel": "取消",
+    "delete": "刪除",
+    "select": "選擇",
+    "selected": "已選擇",
+    "import": "匯入",
+    "builtIn": "內建"
+  }
+}

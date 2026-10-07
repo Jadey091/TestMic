@@ -1,0 +1,208 @@
+{
+  "pages": {
+    "main": {
+      "hints": {
+        "redrawing": "Redessin en cours...",
+        "switching": "Changement en cours..."
+      }
+    },
+    "preference": {
+      "title": "Préférences",
+      "cat": {
+        "title": "Affichage",
+        "labels": {
+          "modelSettings": "Paramètres du modèle",
+          "mirrorMode": "Mode miroir",
+          "mouseMirror": "Miroir de la souris",
+          "mouseCentered": "Souris centrée sur le compagnon",
+          "ignoreMouse": "Ignorer les événements de souris",
+          "windowSettings": "Paramètres de la fenêtre",
+          "passThrough": "Clics traversants",
+          "alwaysOnTop": "Toujours au premier plan",
+          "keepInScreen": "Maintenir à l'écran",
+          "windowSize": "Taille de la fenêtre",
+          "opacity": "Opacité",
+          "autoReleaseDelay": "Délai de relâchement automatique",
+          "hideOnHover": "Masquer au survol",
+          "maxFPS": "Fréquence d'images maximale"
+        },
+        "hints": {
+          "passThrough": "Lorsque cette option est activée, les clics traversent la fenêtre sans l'affecter.",
+          "alwaysOnTop": "Lorsque cette option est activée, la fenêtre reste au-dessus des autres fenêtres.",
+          "keepInScreen": "Lorsque cette option est activée, la fenêtre reste automatiquement dans les limites de l'écran.",
+          "windowSize": "Placez la souris sur le bord de la fenêtre, ou maintenez Maj et faites glisser avec le bouton droit pour redimensionner.",
+          "hideOnHover": "Lorsque cette option est activée, la fenêtre se masque au survol de la souris. Vous pouvez définir un délai ; 0 signifie immédiatement."
+        }
+      },
+      "general": {
+        "title": "Général",
+        "labels": {
+          "appSettings": "Paramètres de l'application",
+          "launchOnStartup": "Lancer au démarrage",
+          "showTrayIcon": "Afficher l'icône dans la zone de notification",
+          "appearanceSettings": "Paramètres d'apparence",
+          "themeMode": "Thème",
+          "language": "Langue",
+          "permissionsSettings": "Paramètres des autorisations",
+          "inputMonitoringPermission": "Autorisation de surveillance des entrées",
+          "administratorPermission": "Administrateur"
+        },
+        "options": {
+          "auto": "Système",
+          "lightMode": "Clair",
+          "darkMode": "Sombre"
+        },
+        "hints": {
+          "showTrayIcon": "Lorsque cette option est activée, l'icône de l'application apparaît dans la zone de notification.",
+          "inputMonitoringPermission": "Activez la surveillance des entrées pour recevoir les événements clavier et souris du système.",
+          "inputMonitoringPermissionGuide": "L'autorisation de surveillance des entrées est nécessaire pour recevoir les événements clavier et souris du système.\n\nÉtapes :\n1. Ouvrez Réglages Système > Confidentialité et sécurité > Surveillance de l'entrée.\n2. Si BongoCat figure déjà dans la liste, sélectionnez-le et cliquez sur le bouton \"-\" pour le retirer.\n3. Cliquez sur le bouton \"+\" pour rechercher et ajouter BongoCat.\n4. Redémarrez l'application pour appliquer l'autorisation.",
+          "administratorPermission": "Exécuter l'application en tant qu'administrateur permet de capturer plus fiablement certaines touches système et certains événements d'entrée.",
+          "administratorPermissionGuide": "Pour capturer plus fiablement certaines touches système et certains événements d'entrée, il est recommandé d'exécuter l'application en tant qu'administrateur.\n\nProcédure :\n1. Quittez d'abord l'application.\n2. Trouvez le fichier exe ou son raccourci dans l'Explorateur de fichiers.\n3. Choisissez le mode de lancement :\n   - Une fois : faites un clic droit et choisissez \"Exécuter en tant qu'administrateur\".\n   - Toujours : clic droit > Propriétés > onglet Compatibilité > cochez \"Exécuter ce programme en tant qu'administrateur\" > OK."
+        },
+        "status": {
+          "authorized": "Autorisé",
+          "adminEnabled": "Activé",
+          "authorize": "Activer",
+          "viewGuide": "Voir les instructions"
+        },
+        "buttons": {
+          "openNow": "Ouvrir maintenant",
+          "openLater": "Ouvrir plus tard",
+          "setLater": "Configurer plus tard",
+          "exitApp": "Quitter l'application"
+        }
+      },
+      "model": {
+        "title": "Modèle",
+        "labels": {
+          "deleteModel": "Supprimer le modèle",
+          "nearbyModels": "Dossiers voisins"
+        },
+        "hints": {
+          "deleteSuccess": "Suppression réussie",
+          "deleteModel": "Voulez-vous vraiment supprimer ce modèle ?",
+          "importSuccess": "Importation réussie",
+          "clickOrDragToImport": "Cliquez ou déposez ici pour importer",
+          "openDirectoryFailed": "Impossible d'ouvrir le dossier du modèle"
+        },
+        "tooltips": {
+          "createModel": "Créer un modèle",
+          "convertModel": "Convertir un modèle",
+          "moreModels": "Plus de modèles"
+        },
+        "behaviorModal": {
+          "title": "Mouvements et expressions",
+          "labels": {
+            "motion": "Mouvement",
+            "expression": "Expression",
+            "motionIndex": "Mouvement {index}",
+            "motionGroupIndex": "Groupe de mouvements {index}",
+            "expressionIndex": "Expression {index}"
+          }
+        }
+      },
+      "shortcut": {
+        "title": "Raccourcis",
+        "labels": {
+          "toggleCat": "Afficher/masquer le compagnon",
+          "togglePreferences": "Afficher/masquer les préférences",
+          "mirrorMode": "Mode miroir",
+          "passThrough": "Clics traversants",
+          "alwaysOnTop": "Toujours au premier plan"
+        },
+        "hints": {
+          "toggleCat": "Affiche ou masque la fenêtre du compagnon.",
+          "togglePreferences": "Affiche ou masque la fenêtre des préférences.",
+          "mirrorMode": "Active ou désactive le mode miroir du compagnon.",
+          "passThrough": "Active ou désactive les clics traversants de la fenêtre.",
+          "alwaysOnTop": "Définit si la fenêtre reste au premier plan."
+        }
+      },
+      "about": {
+        "title": "À propos",
+        "labels": {
+          "aboutApp": "À propos de l'application",
+          "appLog": "Journaux de l'application"
+        },
+        "hints": {
+          "copySuccess": "Copié avec succès"
+        },
+        "buttons": {
+          "copy": "Copier",
+          "viewLog": "Voir les journaux"
+        }
+      }
+    }
+  },
+  "components": {
+    "shortcut": {
+      "hints": {
+        "pressRecordShortcut": "Appuyez pour enregistrer le raccourci",
+        "clickRecordShortcut": "Cliquez pour enregistrer le raccourci",
+        "alreadyUsed": "Ce raccourci est déjà utilisé. Choisissez-en un autre."
+      }
+    }
+  },
+  "composables": {
+    "useAppMenu": {
+      "labels": {
+        "preference": "Préférences...",
+        "hideCat": "Masquer le compagnon",
+        "showCat": "Afficher le compagnon",
+        "passThrough": "Clics traversants",
+        "alwaysOnTop": "Toujours au premier plan",
+        "windowSize": "Taille de la fenêtre",
+        "opacity": "Opacité",
+        "motion": "Mouvements",
+        "expression": "Expressions",
+        "wheelSizeHint": "Molette : redimensionner",
+        "wheelOpacityHint": "Ctrl+molette : opacité",
+        "quitApp": "Quitter l'application",
+        "model": "Modèle",
+        "addModel": "Ajouter un modèle"
+      }
+    }
+  },
+  "utils": {
+    "live2d": {
+      "hints": {
+        "notFound": "Le fichier de configuration principal du modèle est introuvable. Vérifiez que les fichiers du modèle sont complets."
+      }
+    }
+  },
+  "native": {
+    "modelLoadFailed": "Impossible d'afficher ce modèle",
+    "noBehaviors": "Aucun élément",
+    "support": {
+      "title": "Soutenir l'équipe de développement",
+      "heroText": "Merci pour votre soutien. Chaque utilisation et chaque partage aide BongoCat à continuer de grandir.",
+      "version": "Version de l'application",
+      "checkUpdate": "Rechercher des mises à jour",
+      "feedback": "Commentaires",
+      "latest": "Déjà à jour",
+      "works": "Plus d'applications",
+      "worksText": "Plus de logiciels de vladelaina",
+      "refactorDeveloper": "(Développeur ayant reconstruit BongoCat en C)",
+      "community": "Communauté",
+      "qqGroup": "Groupe QQ",
+      "coffee": "Offrir un café à l'équipe de développement ?"
+    },
+    "shortcut": {
+      "toggleCat": "Afficher/masquer",
+      "preferences": "Préférences",
+      "mirror": "Miroir",
+      "passThrough": "Clics traversants",
+      "alwaysOnTop": "Toujours au premier plan"
+    },
+    "hoverDelay": "Délai de survol (secondes)",
+    "modeStandard": "Standard",
+    "modeKeyboard": "Clavier",
+    "modeGamepad": "Manette",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "select": "Sélectionner",
+    "selected": "Sélectionné",
+    "import": "Importer",
+    "builtIn": "intégré"
+  }
+}
