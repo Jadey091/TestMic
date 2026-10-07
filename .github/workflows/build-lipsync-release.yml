@@ -7,7 +7,7 @@ on:
         description: 'Cubism SDK for Native 下载直链（zip 格式）'
         required: true
       tag:
-        description: '发布标签（如 v1.0-lipsync），填了会发布到 Releases；留空只存 Artifact'
+        description: '发布标签（如 v1.0-lipsync）'
         required: false
         default: 'v1.0-lipsync'
 
@@ -28,19 +28,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           $url = "${{ github.event.inputs.cubism_sdk_url }}"
-          Write-Host "Downloading Cubism SDK from: $url"
-          curl.exe -L -H "Authorization: token $env:GITHUB_TOKEN" `
-            -o "$env:TEMP\cubism_sdk.zip" "$url"
-          if ($LASTEXITCODE -ne 0) {
-            Write-Error "curl failed with exit code $LASTEXITCODE"
-            exit 1
-          }
+          Write-Host "Downloading Cubism SDK..."
+          curl.exe -L -H "Authorization: token $env:GITHUB_TOKEN" -o "$env:TEMP\cubism_sdk.zip" "$url"
+          if ($LASTEXITCODE -ne 0) { Write-Error "curl failed"; exit 1 }
           $size = (Get-Item "$env:TEMP\cubism_sdk.zip").Length
-          if ($size -lt 1000) {
-            Write-Error "Downloaded file too small ($size bytes), likely 404 page"
-            exit 1
-          }
-          Write-Host "Download complete, size: $size bytes"
+          if ($size -lt 1000) { Write-Error "File too small ($size bytes), 404?"; exit 1 }
+          Write-Host "Downloaded $size bytes"
 
       - name: Extract Cubism SDK
         shell: pwsh
@@ -48,73 +41,52 @@ jobs:
           $extractDir = "$env:TEMP\cubism_extract"
           if (Test-Path $extractDir) { Remove-Item $extractDir -Recurse -Force }
           Expand-Archive -Path "$env:TEMP\cubism_sdk.zip" -DestinationPath $extractDir -Force
-
-          Write-Host "=== Extracted top-level ==="
-          Get-ChildItem $extractDir | Select-Object Name
-
           $sdkRoot = $null
           $candidates = Get-ChildItem -Path $extractDir -Recurse -Directory |
-            Where-Object {
-              (Test-Path (Join-Path $_.FullName "Core")) -and
-              (Test-Path (Join-Path $_.FullName "Framework"))
-            }
+            Where-Object { (Test-Path (Join-Path $_.FullName "Core")) -and (Test-Path (Join-Path $_.FullName "Framework")) }
           if ($candidates) { $sdkRoot = $candidates[0].FullName }
           if (-not $sdkRoot) {
-            $header = Get-ChildItem -Path $extractDir -Recurse -Filter "Live2DCubismCore.h" |
-              Where-Object { $_.FullName -match "Core[\\/]include" } | Select-Object -First 1
+            $header = Get-ChildItem -Path $extractDir -Recurse -Filter "Live2DCubismCore.h" | Where-Object { $_.FullName -match "Core[\\/]include" } | Select-Object -First 1
             if ($header) { $sdkRoot = $header.Directory.Parent.Parent.FullName }
           }
-          if (-not $sdkRoot) {
-            Write-Error "Cannot find SDK root"
-            Get-ChildItem -Path $extractDir -Recurse -Directory -Depth 3 | Select-Object FullName
-            exit 1
-          }
+          if (-not $sdkRoot) { Write-Error "Cannot find SDK root"; exit 1 }
           Write-Host "SDK root: $sdkRoot"
-
           $target = "vendor\CubismSdkForNative"
           if (Test-Path $target) { Remove-Item $target -Recurse -Force }
           New-Item -ItemType Directory -Path "vendor" -Force | Out-Null
           Copy-Item -Path $sdkRoot -Destination $target -Recurse
+          Write-Host "SDK copied"
 
-          Write-Host "=== SDK root contents ==="
-          Get-ChildItem $target | Select-Object Name
-          Write-Host "=== Samples tree (depth 3) ==="
-          if (Test-Path "$target\Samples") {
-            Get-ChildItem "$target\Samples" -Recurse -Depth 3 | Select-Object FullName
-          } else { Write-Host "Samples NOT FOUND" }
-          Write-Host "=== Search glew ==="
-          $glew = Get-ChildItem -Path $target -Recurse -Directory -Filter "glew" | Select-Object -First 1
-          if ($glew) { Write-Host "glew at: $($glew.FullName)" }
-          else { Write-Host "glew NOT FOUND" }
+      - name: Ensure glew (Cubism SDK 5.x may not bundle it)
+        shell: pwsh
+        run: |
+          $glewPath = "vendor\CubismSdkForNative\Samples\OpenGL\thirdParty\glew"
+          if (Test-Path $glewPath) { Write-Host "glew already present"; exit 0 }
+          Write-Host "Downloading glew 2.2.0..."
+          curl.exe -L -o "$env:TEMP\glew.zip" "https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.zip"
+          if ($LASTEXITCODE -ne 0) { Write-Error "glew download failed"; exit 1 }
+          $glewExtract = "$env:TEMP\glew_extract"
+          if (Test-Path $glewExtract) { Remove-Item $glewExtract -Recurse -Force }
+          Expand-Archive -Path "$env:TEMP\glew.zip" -DestinationPath $glewExtract -Force
+          $glewRoot = Get-ChildItem -Path $glewExtract -Recurse -Directory |
+            Where-Object { (Test-Path (Join-Path $_.FullName "build\cmake")) -and (Test-Path (Join-Path $_.FullName "include")) } | Select-Object -First 1
+          if (-not $glewRoot) { Write-Error "Cannot find glew root"; exit 1 }
+          New-Item -ItemType Directory -Path "vendor\CubismSdkForNative\Samples\OpenGL\thirdParty" -Force | Out-Null
+          Copy-Item -Path $glewRoot.FullName -Destination $glewPath -Recurse
+          Write-Host "glew installed"
 
       - name: Verify Cubism SDK
         shell: pwsh
         run: |
-          if (-not (Test-Path "vendor\CubismSdkForNative\Core\include\Live2DCubismCore.h")) {
-            Write-Error "Core header missing"; exit 1
-          }
-          if (-not (Test-Path "vendor\CubismSdkForNative\Framework")) {
-            Write-Error "Framework missing"; exit 1
-          }
-          if (-not (Test-Path "vendor\CubismSdkForNative\Samples\OpenGL\thirdParty\glew")) {
-            Write-Host "glew not at expected path, searching..."
-            $glew = Get-ChildItem -Path "vendor\CubismSdkForNative" -Recurse -Directory -Filter "glew" | Select-Object -First 1
-            if ($glew) {
-              Write-Host "Found glew at: $($glew.FullName), copying to expected location"
-              New-Item -ItemType Directory -Path "vendor\CubismSdkForNative\Samples\OpenGL\thirdParty" -Force | Out-Null
-              Copy-Item -Path $glew.FullName -Destination "vendor\CubismSdkForNative\Samples\OpenGL\thirdParty\glew" -Recurse
-            } else {
-              Write-Error "glew not found in SDK - package may be incomplete"; exit 1
-            }
-          }
+          if (-not (Test-Path "vendor\CubismSdkForNative\Core\include\Live2DCubismCore.h")) { Write-Error "Core missing"; exit 1 }
+          if (-not (Test-Path "vendor\CubismSdkForNative\Framework")) { Write-Error "Framework missing"; exit 1 }
+          if (-not (Test-Path "vendor\CubismSdkForNative\Samples\OpenGL\thirdParty\glew\build\cmake")) { Write-Error "glew missing"; exit 1 }
           Write-Host "Cubism SDK verified OK"
 
       - name: Configure CMake
         shell: pwsh
         run: |
-          cmake -S . -B build -A x64 `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DBONGO_CAT_REQUIRE_CUBISM=ON
+          cmake -S . -B build -A x64 -DCMAKE_BUILD_TYPE=Release -DBONGO_CAT_REQUIRE_CUBISM=ON
 
       - name: Build
         shell: pwsh
@@ -124,13 +96,8 @@ jobs:
         shell: pwsh
         run: |
           cmake --build build --config Release --target package
-          $archives = @(Get-ChildItem build\dist -File | Where-Object {
-            $_.Name -match '\.zip$'
-          })
-          if ($archives.Count -ne 1) {
-            Write-Error "Expected one zip, found $($archives.Count)"
-            exit 1
-          }
+          $archives = @(Get-ChildItem build\dist -File | Where-Object { $_.Name -match '\.zip$' })
+          if ($archives.Count -ne 1) { Write-Error "Expected one zip"; exit 1 }
           Write-Host "Package: $($archives[0].FullName)"
 
       - name: Upload artifact
@@ -151,14 +118,7 @@ jobs:
           body: |
             BongoCat 口型同步版 (Windows x64)
 
-            ## 开启口型同步
-            首次运行后找到配置文件 preferences.json，在 model 字段里加入：
-            "lipSyncEnabled": true,
-            "lipSyncGain": 1.0,
-            "lipSyncThreshold": 0.02,
-            "lipSyncMaxOpen": 1.0
+            开启口型同步：找到 preferences.json，在 model 里加：
+            "lipSyncEnabled": true, "lipSyncGain": 1.0, "lipSyncThreshold": 0.02, "lipSyncMaxOpen": 1.0
 
-            ## 调参
-            - 嘴不动：lipSyncGain 调大（2.0~3.0）
-            - 太敏感：lipSyncThreshold 调大（0.05）
-            - 嘴张太大：lipSyncMaxOpen 调小（0.7）
+            调参：嘴不动 gain 调大(2-3)，太敏感 threshold 调大(0.05)，嘴太大 maxOpen 调小(0.7)
