@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=BongoCat
+Comment=BongoCat Live2D desktop pet
+Exec=BongoCat
+Icon=bongo-cat
+Categories=Game;Utility;
+Terminal=false
