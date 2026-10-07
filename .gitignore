@@ -1,0 +1,57 @@
+# CMake build trees and generated metadata
+/build*/
+/out/
+/CMakeFiles/
+/Testing/
+/CMakeCache.txt
+/cmake_install.cmake
+/CTestTestfile.cmake
+/compile_commands.json
+/build.ninja
+/.ninja_deps
+/.ninja_log
+/Makefile
+
+# Compiled native artifacts
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.pdb
+*.ilk
+*.exp
+*.dSYM/
+
+# Local licensed dependency; install it separately on each machine
+/vendor/CubismSdkForNative/
+
+# IDE and editor-local state
+/.vs/
+/.vscode/
+/.idea/
+*.user
+*.suo
+*.swp
+*~
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Local reference files
+/.reference/
+
+# Local Windows audit tools
+/cmake/*.ps1
+!/cmake/RunCubismViewerBlindTest.ps1
