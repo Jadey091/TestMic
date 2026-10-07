@@ -4,166 +4,112 @@ on:
   workflow_dispatch:
     inputs:
       cubism_sdk_url:
-        description: 'Cubism SDK for Native 下载直链（zip 格式）。留空则使用仓库 vendor/CubismSdkForNative 目录'
-        required: false
-        default: ''
-      build_windows:
-        description: '构建 Windows x64'
-        required: false
-        default: true
-        type: boolean
-      build_linux:
-        description: '构建 Linux x64'
-        required: false
-        default: false
-        type: boolean
-      build_macos:
-        description: '构建 macOS'
-        required: false
-        default: false
-        type: boolean
+        description: 'Cubism SDK for Native 下载直链（zip 格式）'
+        required: true
       tag:
-        description: '发布标签（如 v1.0.0-lipsync），留空则只上传 Artifact 不发布 Release'
+        description: '发布标签（如 v1.0-lipsync），填了会发布到 Releases；留空只存 Artifact'
         required: false
-        default: ''
+        default: 'v1.0-lipsync'
 
 permissions:
   contents: write
 
 jobs:
-  build:
-    name: build / ${{ matrix.platform }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: windows-latest
-            platform: windows-x64
-            enabled: ${{ github.event.inputs.build_windows == 'true' }}
-          - os: ubuntu-latest
-            platform: linux-x64
-            enabled: ${{ github.event.inputs.build_linux == 'true' }}
-          - os: macos-latest
-            platform: macos
-            enabled: ${{ github.event.inputs.build_macos == 'true' }}
-    if: matrix.enabled == true
+  build-windows:
+    name: build / windows-x64
+    runs-on: windows-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v5
 
-      - name: Install Linux dependencies
-        if: runner.os == 'Linux'
+      - name: Download Cubism SDK
+        shell: pwsh
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            cmake ninja-build libgl1-mesa-dev libx11-dev libxi-dev \
-            libxfixes-dev libfontconfig1-dev
+          $url = "${{ github.event.inputs.cubism_sdk_url }}"
+          Write-Host "Downloading Cubism SDK from: $url"
+          Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\cubism_sdk.zip" -UseBasicParsing
+          Write-Host "Download complete, size: $((Get-Item "$env:TEMP\cubism_sdk.zip").Length) bytes"
 
-      - name: Install macOS dependencies
-        if: runner.os == 'macOS'
-        run: brew install cmake ninja
-
-      - name: Download Cubism SDK from URL
-        if: github.event.inputs.cubism_sdk_url != ''
-        shell: bash
+      - name: Extract Cubism SDK
+        shell: pwsh
         run: |
-          echo "Downloading Cubism SDK..."
-          curl -L -o /tmp/cubism_sdk.zip "${{ github.event.inputs.cubism_sdk_url }}"
-          echo "Extracting..."
-          mkdir -p vendor
-          # 尝试解压到 vendor，自动处理顶层目录
-          cd vendor
-          unzip -o /tmp/cubism_sdk.zip
-          # 找到解压后的 SDK 根目录（包含 Core/include/Live2DCubismCore.h 的目录）
-          SDK_ROOT=$(find . -name "Live2DCubismCore.h" -path "*/Core/include/*" | head -1 | xargs -I{} dirname {} | xargs -I{} dirname {} | xargs -I{} dirname {})
-          echo "Found SDK root: $SDK_ROOT"
-          if [ -n "$SDK_ROOT" ] && [ "$SDK_ROOT" != "./CubismSdkForNative" ]; then
-            mv "$SDK_ROOT" CubismSdkForNative
-          fi
-          cd ..
-          ls -la vendor/CubismSdkForNative/Core/include/ | head
+          $extractDir = "$env:TEMP\cubism_extract"
+          if (Test-Path $extractDir) { Remove-Item $extractDir -Recurse -Force }
+          Expand-Archive -Path "$env:TEMP\cubism_sdk.zip" -DestinationPath $extractDir -Force
+          $header = Get-ChildItem -Path $extractDir -Recurse -Filter "Live2DCubismCore.h" |
+            Where-Object { $_.FullName -match "Core[\\/]include" } | Select-Object -First 1
+          if (-not $header) {
+            Write-Error "Cannot find Live2DCubismCore.h in SDK archive"
+            exit 1
+          }
+          $sdkRoot = $header.Directory.Parent.Parent.FullName
+          Write-Host "SDK root found: $sdkRoot"
+          $target = "vendor\CubismSdkForNative"
+          if (Test-Path $target) { Remove-Item $target -Recurse -Force }
+          New-Item -ItemType Directory -Path "vendor" -Force | Out-Null
+          Copy-Item -Path $sdkRoot -Destination $target -Recurse
+          Write-Host "SDK copied to $target"
+          Get-ChildItem "$target\Core\include" | Select-Object Name
 
       - name: Verify Cubism SDK
-        shell: bash
+        shell: pwsh
         run: |
-          if [ ! -f "vendor/CubismSdkForNative/Core/include/Live2DCubismCore.h" ]; then
-            echo "::error::Cubism SDK not found at vendor/CubismSdkForNative"
-            echo "请确认：1) 提供了正确的下载直链，或 2) 已将 SDK 放入仓库 vendor/CubismSdkForNative 目录"
+          if (-not (Test-Path "vendor\CubismSdkForNative\Core\include\Live2DCubismCore.h")) {
+            Write-Error "Cubism SDK verification failed"
             exit 1
-          fi
-          echo "Cubism SDK verified OK"
+          }
+          Write-Host "Cubism SDK verified OK"
 
-      - name: Configure Windows release
-        if: runner.os == 'Windows'
+      - name: Configure CMake
         shell: pwsh
         run: |
           cmake -S . -B build -A x64 `
             -DCMAKE_BUILD_TYPE=Release `
             -DBONGO_CAT_REQUIRE_CUBISM=ON
 
-      - name: Configure Unix release
-        if: runner.os != 'Windows'
-        run: |
-          cmake -S . -B build -G Ninja \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DBONGO_CAT_REQUIRE_CUBISM=ON
-
-      - name: Build Windows
-        if: runner.os == 'Windows'
+      - name: Build
         shell: pwsh
         run: cmake --build build --config Release --parallel
-
-      - name: Build Unix
-        if: runner.os != 'Windows'
-        run: cmake --build build --parallel
 
       - name: Package
         shell: pwsh
         run: |
           cmake --build build --config Release --target package
-          $archives = @(Get-ChildItem build/dist -File | Where-Object {
-            $_.Name -match '\.(zip|tar\.gz)$'
+          $archives = @(Get-ChildItem build\dist -File | Where-Object {
+            $_.Name -match '\.zip$'
           })
           if ($archives.Count -ne 1) {
-            throw "Expected one release archive, found $($archives.Count)"
+            Write-Error "Expected one zip, found $($archives.Count)"
+            exit 1
           }
-          echo "archive=$($archives[0].FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-          echo "archive_name=$($archives[0].Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          Write-Host "Package: $($archives[0].FullName)"
 
-      - name: Upload build artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
-          name: BongoCat-lipsync-${{ matrix.platform }}
-          path: build/dist/*.zip
+          name: BongoCat-lipsync-windows-x64
+          path: build\dist\*.zip
           if-no-files-found: error
           retention-days: 90
 
-      - name: Upload to Release
+      - name: Publish to Releases
         if: github.event.inputs.tag != ''
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag }}
-          files: build/dist/*.zip
+          files: build\dist\*.zip
           name: BongoCat Lip-Sync ${{ github.event.inputs.tag }}
           body: |
-            BongoCat 口型同步版 (Lip-Sync Build)
+            BongoCat 口型同步版 (Windows x64)
 
-            ## 功能
-            - 麦克风驱动的实时口型同步（ParamMouthOpenY）
-            - 可调节灵敏度、噪声阈值、最大张嘴幅度
-
-            ## 开启方法
-            编辑配置文件中的 model 部分，加入：
-            ```json
+            ## 开启口型同步
+            首次运行后找到配置文件 preferences.json，在 model 字段里加入：
             "lipSyncEnabled": true,
             "lipSyncGain": 1.0,
             "lipSyncThreshold": 0.02,
             "lipSyncMaxOpen": 1.0
-            ```
-            或在首次运行后修改生成的配置文件。
 
-            ## 注意
-            - 需要模型包含 ParamMouthOpenY 参数（标准 Live2D 模型都有）
-            - 首次运行会请求麦克风权限
-            - Windows 下如果没声音，检查系统麦克风默认设备
+            ## 调参
+            - 嘴不动：lipSyncGain 调大（2.0~3.0）
+            - 太敏感：lipSyncThreshold 调大（0.05）
+            - 嘴张太大：lipSyncMaxOpen 调小（0.7）
