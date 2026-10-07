@@ -1,0 +1,188 @@
+name: BongoCat CI
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bongo-cat-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: quality / syntax-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+
+      - name: Install quality and build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            cmake ninja-build cppcheck \
+            libgl1-mesa-dev libx11-dev libxi-dev libxfixes-dev
+
+      - name: Reject legacy product-name references
+        run: |
+          legacy='l2d''cat'
+          if grep -RIni --exclude-dir=.git --exclude-dir=build \
+              --exclude='*.png' --exclude='*.flac' "$legacy" .; then
+            echo "Legacy product-name reference found"
+            exit 1
+          fi
+
+      - name: Check source file size policy
+        run: cmake -DROOT="$GITHUB_WORKSPACE" -P cmake/CheckLines.cmake
+
+      - name: Run Cppcheck
+        shell: bash
+        run: |
+          mapfile -d '' c_files < <(find src -type f -name '*.c' -print0)
+          cppcheck --enable=warning,performance,portability \
+            --error-exitcode=1 --inline-suppr \
+            --suppress=missingIncludeSystem --suppress=unknownMacro \
+            --std=c11 -Iinclude -Isrc/ui -Isrc/runtime "${c_files[@]}"
+          mapfile -d '' cpp_files < <(find src -type f -name '*.cpp' -print0)
+          cppcheck --enable=warning,performance,portability \
+            --error-exitcode=1 --inline-suppr \
+            --suppress=missingIncludeSystem --suppress=unknownMacro \
+            --suppress=passedByValueCallback --std=c++17 \
+            -Iinclude -Isrc/ui -Isrc/runtime "${cpp_files[@]}"
+
+      - name: Configure warning-clean Linux build
+        run: |
+          cmake -S . -B build-quality -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBONGO_CAT_WARNINGS_AS_ERRORS=ON
+
+      - name: Register GCC diagnostics
+        run: echo "::add-matcher::$GITHUB_WORKSPACE/.github/gcc-problem-matcher.json"
+
+      - name: Build
+        run: bash .github/scripts/build-unix.sh cmake --build build-quality --parallel 2
+
+      - name: Run native tests
+        run: ctest --test-dir build-quality --output-on-failure
+
+  build:
+    name: build / ${{ matrix.platform }}
+    needs: quality
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows-x64
+          - os: ubuntu-latest
+            platform: linux-x64
+          - os: macos-latest
+            platform: macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            cmake ninja-build libgl1-mesa-dev libx11-dev libxi-dev \
+            libxfixes-dev
+
+      - name: Configure Windows release
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          cmake -S . -B build -A x64 `
+            -DBONGO_CAT_WARNINGS_AS_ERRORS=ON
+
+      - name: Configure Unix release
+        if: runner.os != 'Windows'
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBONGO_CAT_WARNINGS_AS_ERRORS=ON
+
+      - name: Register GCC diagnostics
+        if: runner.os == 'Linux'
+        run: echo "::add-matcher::$GITHUB_WORKSPACE/.github/gcc-problem-matcher.json"
+
+      - name: Build Windows release
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: >-
+          & ./.github/scripts/build-windows.ps1
+          cmake --build build --config Release --parallel 2
+
+      - name: Build Windows validation tools
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: >-
+          & ./.github/scripts/build-windows.ps1
+          cmake --build build --config Release
+          --target bongo_cat_validation_tools --parallel 2
+
+      - name: Build Unix release
+        if: runner.os != 'Windows'
+        run: bash .github/scripts/build-unix.sh cmake --build build --parallel 2
+
+      - name: Test Windows release
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: >-
+          & ./.github/scripts/test-windows.ps1
+          ctest --test-dir build -C Release --output-on-failure
+
+      - name: Test Unix release
+        if: runner.os != 'Windows'
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Resolve release package name
+        id: package
+        shell: pwsh
+        run: |
+          $name = (Get-Content build/bongo-cat-package-name.txt -Raw).Trim()
+          if ($name -notmatch '^BongoCat-\d+\.\d+\.\d+-(windows|linux|macos)-(x64|x86|arm64|universal)$') {
+            throw "Unexpected release package name: $name"
+          }
+          "name=$name" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Package release
+        shell: pwsh
+        run: |
+          cmake --build build --config Release --target package
+          $archives = @(Get-ChildItem build/dist -File | Where-Object {
+            $_.Name -match '\.(zip|tar\.gz)$'
+          })
+          if ($archives.Count -ne 1) {
+            throw "Expected one release archive, found $($archives.Count)"
+          }
+          $expected = '${{ steps.package.outputs.name }}'
+          if (-not $archives[0].Name.StartsWith("$expected.")) {
+            throw "Unexpected release archive: $($archives[0].Name)"
+          }
+          if (-not (Test-Path -LiteralPath "$($archives[0].FullName).sha256")) {
+            throw "Release archive checksum is missing"
+          }
+          @'
+          This CI artifact uses the diagnostic renderer because the licensed
+          Cubism SDK is not present in the public source checkout. It is for
+          startup and platform diagnostics, not end-user distribution.
+          '@ | Set-Content build/dist/DIAGNOSTIC-NO-CUBISM.txt -Encoding ascii
+
+      - name: Upload diagnostic build
+        uses: actions/upload-artifact@v7
+        with:
+          name: diagnostic-no-cubism-${{ steps.package.outputs.name }}
+          path: build/dist/*
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
