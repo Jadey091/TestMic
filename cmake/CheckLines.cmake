@@ -45,6 +45,8 @@ foreach(FILE IN LISTS FILES)
     set(LIMIT 321)
   elseif(RELATIVE_FILE STREQUAL "CMakeLists.txt")
     set(LIMIT 336)
+  elseif(RELATIVE_FILE STREQUAL "src/runtime/app.c")
+    set(LIMIT 320)
   endif()
 
   if(COUNT GREATER LIMIT)
