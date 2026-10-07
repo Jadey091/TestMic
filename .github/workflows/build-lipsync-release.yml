@@ -17,7 +17,7 @@ permissions:
 jobs:
   build-windows:
     name: build / windows-x64
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
       - name: Checkout source
         uses: actions/checkout@v5
