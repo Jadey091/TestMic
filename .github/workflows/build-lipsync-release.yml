@@ -48,27 +48,64 @@ jobs:
           $extractDir = "$env:TEMP\cubism_extract"
           if (Test-Path $extractDir) { Remove-Item $extractDir -Recurse -Force }
           Expand-Archive -Path "$env:TEMP\cubism_sdk.zip" -DestinationPath $extractDir -Force
-          $header = Get-ChildItem -Path $extractDir -Recurse -Filter "Live2DCubismCore.h" |
-            Where-Object { $_.FullName -match "Core[\\/]include" } | Select-Object -First 1
-          if (-not $header) {
-            Write-Error "Cannot find Live2DCubismCore.h in SDK archive"
+
+          Write-Host "=== Extracted top-level ==="
+          Get-ChildItem $extractDir | Select-Object Name
+
+          $sdkRoot = $null
+          $candidates = Get-ChildItem -Path $extractDir -Recurse -Directory |
+            Where-Object {
+              (Test-Path (Join-Path $_.FullName "Core")) -and
+              (Test-Path (Join-Path $_.FullName "Framework"))
+            }
+          if ($candidates) { $sdkRoot = $candidates[0].FullName }
+          if (-not $sdkRoot) {
+            $header = Get-ChildItem -Path $extractDir -Recurse -Filter "Live2DCubismCore.h" |
+              Where-Object { $_.FullName -match "Core[\\/]include" } | Select-Object -First 1
+            if ($header) { $sdkRoot = $header.Directory.Parent.Parent.FullName }
+          }
+          if (-not $sdkRoot) {
+            Write-Error "Cannot find SDK root"
+            Get-ChildItem -Path $extractDir -Recurse -Directory -Depth 3 | Select-Object FullName
             exit 1
           }
-          $sdkRoot = $header.Directory.Parent.Parent.FullName
-          Write-Host "SDK root found: $sdkRoot"
+          Write-Host "SDK root: $sdkRoot"
+
           $target = "vendor\CubismSdkForNative"
           if (Test-Path $target) { Remove-Item $target -Recurse -Force }
           New-Item -ItemType Directory -Path "vendor" -Force | Out-Null
           Copy-Item -Path $sdkRoot -Destination $target -Recurse
-          Write-Host "SDK copied to $target"
-          Get-ChildItem "$target\Core\include" | Select-Object Name
+
+          Write-Host "=== SDK root contents ==="
+          Get-ChildItem $target | Select-Object Name
+          Write-Host "=== Samples tree (depth 3) ==="
+          if (Test-Path "$target\Samples") {
+            Get-ChildItem "$target\Samples" -Recurse -Depth 3 | Select-Object FullName
+          } else { Write-Host "Samples NOT FOUND" }
+          Write-Host "=== Search glew ==="
+          $glew = Get-ChildItem -Path $target -Recurse -Directory -Filter "glew" | Select-Object -First 1
+          if ($glew) { Write-Host "glew at: $($glew.FullName)" }
+          else { Write-Host "glew NOT FOUND" }
 
       - name: Verify Cubism SDK
         shell: pwsh
         run: |
           if (-not (Test-Path "vendor\CubismSdkForNative\Core\include\Live2DCubismCore.h")) {
-            Write-Error "Cubism SDK verification failed"
-            exit 1
+            Write-Error "Core header missing"; exit 1
+          }
+          if (-not (Test-Path "vendor\CubismSdkForNative\Framework")) {
+            Write-Error "Framework missing"; exit 1
+          }
+          if (-not (Test-Path "vendor\CubismSdkForNative\Samples\OpenGL\thirdParty\glew")) {
+            Write-Host "glew not at expected path, searching..."
+            $glew = Get-ChildItem -Path "vendor\CubismSdkForNative" -Recurse -Directory -Filter "glew" | Select-Object -First 1
+            if ($glew) {
+              Write-Host "Found glew at: $($glew.FullName), copying to expected location"
+              New-Item -ItemType Directory -Path "vendor\CubismSdkForNative\Samples\OpenGL\thirdParty" -Force | Out-Null
+              Copy-Item -Path $glew.FullName -Destination "vendor\CubismSdkForNative\Samples\OpenGL\thirdParty\glew" -Recurse
+            } else {
+              Write-Error "glew not found in SDK - package may be incomplete"; exit 1
+            }
           }
           Write-Host "Cubism SDK verified OK"
 
