@@ -24,11 +24,23 @@ jobs:
 
       - name: Download Cubism SDK
         shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           $url = "${{ github.event.inputs.cubism_sdk_url }}"
           Write-Host "Downloading Cubism SDK from: $url"
-          Invoke-WebRequest -Uri $url -OutFile "$env:TEMP\cubism_sdk.zip" -UseBasicParsing
-          Write-Host "Download complete, size: $((Get-Item "$env:TEMP\cubism_sdk.zip").Length) bytes"
+          curl.exe -L -H "Authorization: token $env:GITHUB_TOKEN" `
+            -o "$env:TEMP\cubism_sdk.zip" "$url"
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "curl failed with exit code $LASTEXITCODE"
+            exit 1
+          }
+          $size = (Get-Item "$env:TEMP\cubism_sdk.zip").Length
+          if ($size -lt 1000) {
+            Write-Error "Downloaded file too small ($size bytes), likely 404 page"
+            exit 1
+          }
+          Write-Host "Download complete, size: $size bytes"
 
       - name: Extract Cubism SDK
         shell: pwsh
